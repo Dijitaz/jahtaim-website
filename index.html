@@ -6,250 +6,500 @@
   <title>Vibin with J | Steelpan Bookings</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="site-header">
+
+  <!-- Musical note glitter canvas -->
+  <canvas id="noteCanvas" aria-hidden="true"></canvas>
+
+  <!-- Ambient sound waves decoration -->
+  <div class="ambient-rings" aria-hidden="true">
+    <div class="ring r1"></div>
+    <div class="ring r2"></div>
+    <div class="ring r3"></div>
+  </div>
+
+  <header class="site-header" id="top">
     <div class="brand">
       <img src="images/logo.jpg" alt="Vibin with J logo" class="logo">
       <div class="brand-text">
         <span class="eyebrow">Steelpan musician</span>
-        <h1>Vibin with 𝓙</h1>
+        <h1>Vibin with <span class="script-j">𝓙</span></h1>
       </div>
     </div>
-    <nav class="nav">
+    <nav class="nav" role="navigation">
       <a href="#packages">Packages</a>
       <a href="#gallery">Gallery</a>
+      <a href="#testimonials">Reviews</a>
       <a href="#booking">Book</a>
-      <a class="pill" href="https://wa.me/18768355120">Call/WhatsApp</a>
+      <a class="nav-cta" href="https://wa.me/18768355120" target="_blank" rel="noopener">
+        <span class="wa-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </span>
+        WhatsApp
+      </a>
     </nav>
+    <button class="menu-toggle" aria-label="Toggle menu" id="menuToggle">
+      <span></span><span></span><span></span>
+    </button>
   </header>
 
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#packages">Packages</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#testimonials">Reviews</a>
+    <a href="#booking">Book</a>
+    <a href="https://wa.me/18768355120" target="_blank">WhatsApp Jahtaim</a>
+  </div>
+
   <main>
-    <section class="hero" style="background-image: url('images/Jahtaim.png'); background-size: cover; background-position: center;">
-      <div class="hero-bg" aria-hidden="true"></div>
-      <div class="hero-content">
-        <p class="tag">Fresh steelpan energy • Friendly rates</p>
-        <h2>Let the steelpan shimmer at your next event.</h2>
-        <p class="lede">Hello, I'm Jahtaim — a Jamaican steelpan musician bringing vibrant, soulful energy to every performance. From intimate gatherings to special celebrations, I create live music experiences that feel authentic, uplifting, and unforgettable. If you're looking to add a unique island vibe to your event, I'm here to make it happen.</p>
-        <div class="cta-row">
-          <a class="btn primary" href="#booking">Book Jahtaim</a>
-          <a class="btn ghost" href="#packages">See packages</a>
-          <span class="price-chip">Starting at $100 · ideal for intimate events</span>
+
+    <!-- HERO -->
+    <section class="hero" style="background-image: url('images/Jahtaim.png'); background-size: cover; background-position: center top;">
+      <div class="hero-bg" aria-hidden="true">
+        <div class="hero-img-layer"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-grain"></div>
+        <!-- Pan silhouette SVG decoration -->
+        <svg class="pan-deco pan-deco--left" viewBox="0 0 200 200" fill="none" aria-hidden="true">
+          <ellipse cx="100" cy="100" rx="90" ry="90" stroke="rgba(255,200,80,0.12)" stroke-width="2"/>
+          <ellipse cx="100" cy="100" rx="70" ry="70" stroke="rgba(255,200,80,0.08)" stroke-width="1.5"/>
+          <ellipse cx="100" cy="100" rx="50" ry="50" stroke="rgba(255,200,80,0.06)" stroke-width="1"/>
+          <circle cx="68" cy="72" r="9" fill="rgba(255,200,80,0.08)" stroke="rgba(255,200,80,0.15)" stroke-width="1"/>
+          <circle cx="100" cy="62" r="9" fill="rgba(255,200,80,0.08)" stroke="rgba(255,200,80,0.15)" stroke-width="1"/>
+          <circle cx="132" cy="72" r="9" fill="rgba(255,200,80,0.08)" stroke="rgba(255,200,80,0.15)" stroke-width="1"/>
+          <circle cx="148" cy="100" r="9" fill="rgba(255,200,80,0.08)" stroke="rgba(255,200,80,0.15)" stroke-width="1"/>
+          <circle cx="132" cy="128" r="9" fill="rgba(255,200,80,0.08)" stroke="rgba(255,200,80,0.15)" stroke-width="1"/>
+          <circle cx="100" cy="138" r="9" fill="rgba(255,200,80,0.08)" stroke="rgba(255,200,80,0.15)" stroke-width="1"/>
+          <circle cx="68" cy="128" r="9" fill="rgba(255,200,80,0.08)" stroke="rgba(255,200,80,0.15)" stroke-width="1"/>
+          <circle cx="52" cy="100" r="9" fill="rgba(255,200,80,0.08)" stroke="rgba(255,200,80,0.15)" stroke-width="1"/>
+        </svg>
+        <svg class="pan-deco pan-deco--right" viewBox="0 0 200 200" fill="none" aria-hidden="true">
+          <ellipse cx="100" cy="100" rx="90" ry="90" stroke="rgba(29,209,161,0.1)" stroke-width="2"/>
+          <ellipse cx="100" cy="100" rx="65" ry="65" stroke="rgba(29,209,161,0.07)" stroke-width="1.5"/>
+          <circle cx="68" cy="72" r="8" fill="rgba(29,209,161,0.07)" stroke="rgba(29,209,161,0.12)" stroke-width="1"/>
+          <circle cx="100" cy="62" r="8" fill="rgba(29,209,161,0.07)" stroke="rgba(29,209,161,0.12)" stroke-width="1"/>
+          <circle cx="132" cy="72" r="8" fill="rgba(29,209,161,0.07)" stroke="rgba(29,209,161,0.12)" stroke-width="1"/>
+          <circle cx="148" cy="100" r="8" fill="rgba(29,209,161,0.07)" stroke="rgba(29,209,161,0.12)" stroke-width="1"/>
+          <circle cx="132" cy="128" r="8" fill="rgba(29,209,161,0.07)" stroke="rgba(29,209,161,0.12)" stroke-width="1"/>
+          <circle cx="100" cy="138" r="8" fill="rgba(29,209,161,0.07)" stroke="rgba(29,209,161,0.12)" stroke-width="1"/>
+          <circle cx="68" cy="128" r="8" fill="rgba(29,209,161,0.07)" stroke="rgba(29,209,161,0.12)" stroke-width="1"/>
+          <circle cx="52" cy="100" r="8" fill="rgba(29,209,161,0.07)" stroke="rgba(29,209,161,0.12)" stroke-width="1"/>
+        </svg>
+      </div>
+
+      <div class="hero-content reveal-up">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          Fresh steelpan energy · Friendly rates
         </div>
-        <div class="hero-list">
-          <div>
-            <h3>What you can expect</h3>
-            <ul>
-              <li>Live music tailored to any crowd</li>
-              <li>Custom song requests welcomed</li>
-              <li>Compact setup fits patios, rooftops, and small stages</li>
-            </ul>
+        <h2 class="hero-title">
+          Let the steelpan<br>
+          <em>shimmer</em> at your<br>
+          next event.
+        </h2>
+        <p class="hero-lede">
+          Hello, I'm <strong>Jahtaim</strong> — a Jamaican steelpan musician bringing vibrant, soulful energy to every performance. From intimate gatherings to special celebrations, I create live music experiences that feel authentic, uplifting, and unforgettable.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#booking">
+            <span>Book Jahtaim</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a class="btn btn-ghost" href="#packages">
+            See packages
+          </a>
+          <div class="hero-price-tag">Starting at <strong>$100</strong></div>
+        </div>
+
+        <div class="hero-audio-card reveal-up" style="animation-delay:0.5s;" id="audioCard">
+          <div class="audio-top-row">
+            <div class="audio-live-badge">
+              <span class="pulse-dot"></span>
+              Live Preview
+            </div>
+            <span class="audio-track-name">Jahtaim — Steelpan Set</span>
           </div>
-          <div class="card audio-card">
-            <p class="card-title">Take a Listen</p>
-            <!-- Replace media/audio.m4a with your actual audio file path -->
-            <audio controls>
-              <source src="media/audio.m4a" type="audio/mp4">
-              <source src="media/audio.mp3" type="audio/mpeg">
-              <p style="font-size:0.85rem; opacity:0.7;">Audio preview coming soon — drop your file in the <code>media/</code> folder.</p>
-            </audio>
+          <!-- Custom waveform player -->
+          <div class="audio-player" id="audioPlayer">
+            <button class="play-btn" id="playBtn" aria-label="Play / Pause">
+              <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" hidden><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <div class="waveform" id="waveform" aria-hidden="true">
+              <!-- Bars generated by JS -->
+            </div>
+            <span class="audio-time" id="audioTime">0:00</span>
           </div>
+          <audio id="audioEl" preload="metadata">
+            <source src="media/audio.m4a" type="audio/mp4">
+            <source src="media/audio.mp3" type="audio/mpeg">
+          </audio>
         </div>
       </div>
-    </section>
 
-    <section id="packages" class="section packages">
-      <div class="section-head">
-        <p class="tag">Clear pricing</p>
-        <h3>Pick a package that fits your moment.</h3>
-        <p>No hidden fees. Travel within Kingston included; reach out for other locations.</p>
-      </div>
-      <div class="cards-grid">
-        <article class="card">
-          <div class="card-top">
-            <h4>Sweet Moment</h4>
-            <p class="price">$100 · 45 minutes</p>
-          </div>
-          <ul>
-            <li>A beautifully intimate live performance designed to make your moment unforgettable.</li>
-            <li>Perfect for proposals, serenades, or creating a soft personal atmosphere.</li>
-            <li>Up to 2 song requests and a compact speaker provided.</li>
-          </ul>
-          <a class="btn secondary" href="#booking">Book now</a>
-        </article>
-        <article class="card highlight">
-          <div class="card-top">
-            <h4>Golden Hour Set</h4>
-            <p class="price">$145 · 75 minutes</p>
-          </div>
-          <ul>
-            <li>A warm, feel-good live set that brings the perfect vibe to your event.</li>
-            <li>Ideal for birthdays, showers, and cocktail hours—smooth music and ambience to keep the energy right.</li>
-            <li>Up to 5 song requests, with mood lighting and curated breaks.</li>
-          </ul>
-          <a class="btn primary" href="#booking">Book now</a>
-        </article>
-        <article class="card">
-          <div class="card-top">
-            <h4>Signature Experience</h4>
-            <p class="price">$175 · 2 hours</p>
-          </div>
-          <ul>
-            <li>A full immersive live experience tailored to your event.</li>
-            <li>Custom set lists and engaging moments with your guests for a polished performance.</li>
-            <li>Designed to leave a lasting impression; larger PA hookup available on request.</li>
-          </ul>
-          <a class="btn secondary" href="#booking">Book now</a>
-        </article>
+      <div class="hero-scroll-cue" aria-hidden="true">
+        <div class="scroll-line"></div>
+        <span>scroll</span>
       </div>
     </section>
 
-    <section class="section split">
-      <div>
-        <p class="tag">What you get</p>
-        <h3>Great vibe, lasting impact.</h3>
-        <ul class="checklist">
-          <li>Arrives early for a smooth, quiet setup.</li>
-          <li>Flexible and easy to work with; adapts to last-minute changes.</li>
-          <li>Dress style tailored to your event.</li>
-          <li>Backup tracks ready for any situation.</li>
-        </ul>
-      </div>
-      <div class="card photo-card">
-        <!-- This photo panel is styled via CSS (.photo-card .photo). Set its background-image in styles.css -->
-        <div class="photo" role="img" aria-label="Young steelpan musician performing outdoors"></div>
-      </div>
-    </section>
-
-    <section id="gallery" class="section gallery">
-      <div class="section-head">
-        <p class="tag">Visuals</p>
-        <h3>A peek at the vibe.</h3>
-      </div>
-      <div class="gallery-grid">
-        <!-- Replace these with your actual image paths, e.g. style="background-image:url('images/gallery1.jpg')" -->
-        <div class="tile t1"></div>
-        <div class="tile t2"></div>
-        <div class="tile t3"></div>
-        <div class="tile t4"></div>
-      </div>
-      <p class="swap-note">Replace gallery URLs in <code>styles.css</code> → look for <span class="code-inline">--gallery-*</span> variables.</p>
-    </section>
-
-    <section class="section testimonials">
-      <div class="section-head">
-        <p class="tag">Word of mouth</p>
-        <h3>People are booking and smiling.</h3>
-      </div>
-      <div class="cards-grid">
-        <article class="card quote">
-          <p>"A brilliant musician who brings every moment to life through his talent. His sound is pure vibes music that truly reaches the soul."</p>
-          <span class="sig">— Abigail Ward</span>
-        </article>
-        <article class="card quote">
-          <p>"An out-of-this-world talent who paints a beautiful picture with his melodious tunes."</p>
-          <span class="sig">— Abishua Johnson</span>
-        </article>
-        <article class="card quote">
-          <p>"Great tone, easy communication, and the rate was perfect for our small launch party."</p>
-          <span class="sig">— Aiden, startup founder</span>
-        </article>
-      </div>
-    </section>
-
-    <section class="section faq">
-      <div class="section-head">
-        <p class="tag">FAQ</p>
-        <h3>Quick answers before you book.</h3>
-      </div>
-      <div class="faq-grid">
-        <div class="card">
-          <h4>Can you learn a song for us?</h4>
-          <p>Yes—send the track at least 3 days before and I'll have it ready.</p>
-        </div>
-        <div class="card">
-          <h4>Do you travel?</h4>
-          <p>Kingston included. For St. Catherine, St. Andrew, or further, I'll add a small travel fee.</p>
-        </div>
-        <div class="card">
-          <h4>Weather backup?</h4>
-          <p>I can play indoors with a compact setup or run backing tracks if space is tight.</p>
-        </div>
-        <div class="card">
-          <h4>How do we lock the date?</h4>
-          <p>50% deposit via bank transfer to hold the slot, balance due day-of.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="booking" class="section booking">
-      <div class="section-head">
-        <p class="tag">Book now</p>
-        <h3>Tell me about your event.</h3>
-        <p>Share the basics and I'll confirm within 24 hours.</p>
-      </div>
-      <form class="card form" action="mailto:VibinWithJ@hotmail.com" method="post" enctype="text/plain">
-        <label>
-          Name
-          <input type="text" name="name" placeholder="Your name" required>
-        </label>
-        <label>
-          Email or WhatsApp/Phone
-          <input type="text" name="contact" placeholder="you@example.com or WhatsApp/phone" required>
-        </label>
-        <label class="split-inputs">
-          <span>
-            Date
-            <input type="date" name="date" required>
+    <!-- WHAT YOU GET STRIP -->
+    <section class="feature-strip" aria-label="Key features">
+      <div class="strip-inner">
+        <div class="strip-item reveal-fade">
+          <span class="strip-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="20" height="20"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
           </span>
-          <span>
-            City
-            <input type="text" name="city" placeholder="Kingston" required>
+          <p>Custom song requests welcomed</p>
+        </div>
+        <div class="strip-divider" aria-hidden="true"></div>
+        <div class="strip-item reveal-fade" style="animation-delay:.1s">
+          <span class="strip-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="20" height="20"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
           </span>
-        </label>
-        <label>
-          Which package?
-          <select name="package">
-            <option>Sweet Moment</option>
-            <option>Golden Hour Set</option>
-            <option>Signature Experience</option>
-            <option>Custom (tell me below)</option>
-          </select>
-        </label>
-        <label>
-          Notes or song requests
-          <textarea name="notes" rows="4" placeholder="Tell me about the vibe you want"></textarea>
-        </label>
-        <button type="submit" class="btn primary full">Send request</button>
-        <p class="small">Prefer direct? Email <a href="mailto:VibinWithJ@hotmail.com">VibinWithJ@hotmail.com</a> or call <a href="tel:+1-876-835-5120">+1 (876) 835-5120</a>.</p>
-      </form>
+          <p>Compact setup for any venue</p>
+        </div>
+        <div class="strip-divider" aria-hidden="true"></div>
+        <div class="strip-item reveal-fade" style="animation-delay:.2s">
+          <span class="strip-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="20" height="20"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 6v6l4 2"/></svg>
+          </span>
+          <p>Authentic Jamaican vibe</p>
+        </div>
+        <div class="strip-divider" aria-hidden="true"></div>
+        <div class="strip-item reveal-fade" style="animation-delay:.3s">
+          <span class="strip-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="20" height="20"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </span>
+          <p>Live music tailored to your crowd</p>
+        </div>
+      </div>
     </section>
+
+    <!-- PACKAGES -->
+    <section id="packages" class="section packages-section">
+      <div class="section-inner">
+        <div class="section-head reveal-up">
+          <p class="eyebrow-label">Clear pricing</p>
+          <h3>Pick the package that<br><em>fits your moment.</em></h3>
+          <p class="section-sub">No hidden fees. Travel within Kingston included; reach out for other locations.</p>
+        </div>
+
+        <div class="packages-grid">
+          <article class="pkg-card reveal-up" style="animation-delay:.1s">
+            <div class="pkg-card-inner">
+              <div class="pkg-ornament" aria-hidden="true">♩</div>
+              <div class="pkg-header">
+                <h4>Sweet Moment</h4>
+                <div class="pkg-price"><span class="price-amt">$100</span><span class="price-dur">· 45 min</span></div>
+              </div>
+              <ul class="pkg-list">
+                <li>Beautifully intimate live performance</li>
+                <li>Perfect for proposals, serenades, soft atmospheres</li>
+                <li>Up to 2 song requests</li>
+                <li>Compact speaker provided</li>
+              </ul>
+              <a class="btn btn-outline" href="#booking" data-package="Sweet Moment">Book this</a>
+            </div>
+          </article>
+
+          <article class="pkg-card pkg-card--featured reveal-up" style="animation-delay:.2s">
+            <div class="pkg-badge-top">Most Popular</div>
+            <div class="pkg-card-inner">
+              <div class="pkg-ornament" aria-hidden="true">♬</div>
+              <div class="pkg-header">
+                <h4>Golden Hour Set</h4>
+                <div class="pkg-price"><span class="price-amt">$145</span><span class="price-dur">· 75 min</span></div>
+              </div>
+              <ul class="pkg-list">
+                <li>Warm, feel-good live set for birthdays, showers, cocktail hours</li>
+                <li>Up to 5 song requests</li>
+                <li>Mood lighting included</li>
+                <li>Curated breaks and smooth transitions</li>
+              </ul>
+              <a class="btn btn-primary" href="#booking" data-package="Golden Hour Set">Book this</a>
+            </div>
+          </article>
+
+          <article class="pkg-card reveal-up" style="animation-delay:.3s">
+            <div class="pkg-card-inner">
+              <div class="pkg-ornament" aria-hidden="true">𝄞</div>
+              <div class="pkg-header">
+                <h4>Signature Experience</h4>
+                <div class="pkg-price"><span class="price-amt">$175</span><span class="price-dur">· 2 hrs</span></div>
+              </div>
+              <ul class="pkg-list">
+                <li>Full immersive live experience tailored to your event</li>
+                <li>Custom set lists with guest interaction</li>
+                <li>Polished, lasting impression</li>
+                <li>Larger PA hookup available on request</li>
+              </ul>
+              <a class="btn btn-outline" href="#booking" data-package="Signature Experience">Book this</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT / PHOTO SPLIT -->
+    <section class="about-section">
+      <div class="about-inner">
+        <div class="about-photo-wrap reveal-left">
+          <div class="about-photo" role="img" aria-label="Jahtaim performing steelpan" style="background-image: url('images/Jahtaim.png');"></div>
+          <div class="about-photo-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Based in Kingston, Jamaica
+          </div>
+        </div>
+        <div class="about-text reveal-right">
+          <p class="eyebrow-label">What you get</p>
+          <h3>Great vibe,<br><em>lasting impact.</em></h3>
+          <p class="about-body">Every performance is more than music — it's an experience. From the moment I arrive to the final note, I'm focused on making your event feel effortless and extraordinary.</p>
+          <ul class="checklist">
+            <li>Arrives early for smooth, quiet setup</li>
+            <li>Flexible and easy to work with — adapts to last-minute changes</li>
+            <li>Dress style tailored to your event</li>
+            <li>Backup tracks ready for any situation</li>
+            <li>Pan tuned and maintained to professional standard</li>
+          </ul>
+          <a class="btn btn-primary" href="#booking" style="margin-top:1.5rem; display:inline-flex;">
+            Check availability
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery" class="section gallery-section">
+      <div class="section-inner">
+        <div class="section-head reveal-up">
+          <p class="eyebrow-label">Visuals</p>
+          <h3>A peek at the <em>vibe.</em></h3>
+        </div>
+        <div class="gallery-grid">
+          <div class="gallery-tile gt1 reveal-fade" style="animation-delay:.05s"></div>
+          <div class="gallery-tile gt2 reveal-fade" style="animation-delay:.1s"></div>
+          <div class="gallery-tile gt3 reveal-fade" style="animation-delay:.15s"></div>
+          <div class="gallery-tile gt4 reveal-fade" style="animation-delay:.2s"></div>
+        </div>
+        <p class="gallery-hint">Replace gallery images in <code>styles.css</code> → <code>--gallery-*</code> variables</p>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials" class="section testimonials-section">
+      <div class="section-inner">
+        <div class="section-head reveal-up">
+          <p class="eyebrow-label">Word of mouth</p>
+          <h3>People are booking<br><em>and smiling.</em></h3>
+        </div>
+        <div class="testimonials-grid">
+          <!--
+          ══════════════════════════════════════════════════
+          TO ADD A NEW TESTIMONIAL — copy this block and
+          paste it anywhere inside .testimonials-grid:
+
+          <article class="testimonial-card reveal-up">
+            <div class="quote-mark">"</div>
+            <p class="quote-text">Write the review here.</p>
+            <div class="quote-sig">
+              <div class="sig-avatar">XY</div>
+              <span>Full Name or Handle</span>
+            </div>
+          </article>
+
+          Grid auto-fits — cards will reflow automatically.
+          ══════════════════════════════════════════════════
+          -->
+          <article class="testimonial-card reveal-up" style="animation-delay:.1s">
+            <div class="quote-mark">"</div>
+            <p class="quote-text">A brilliant musician who brings every moment to life through his talent. His sound is pure vibes music that truly reaches the soul.</p>
+            <div class="quote-sig">
+              <div class="sig-avatar">AW</div>
+              <span>Abigail Ward</span>
+            </div>
+          </article>
+          <article class="testimonial-card reveal-up" style="animation-delay:.2s">
+            <div class="quote-mark">"</div>
+            <p class="quote-text">An out-of-this-world talent who paints a beautiful picture with his melodious tunes.</p>
+            <div class="quote-sig">
+              <div class="sig-avatar">AJ</div>
+              <span>Abishua Johnson</span>
+            </div>
+          </article>
+          <article class="testimonial-card reveal-up" style="animation-delay:.3s">
+            <div class="quote-mark">"</div>
+            <p class="quote-text">Great tone, easy communication, and the rate was perfect for our small launch party. Would absolutely book again.</p>
+            <div class="quote-sig">
+              <div class="sig-avatar">A</div>
+              <span>Aiden, startup founder</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section faq-section">
+      <div class="section-inner">
+        <div class="section-head reveal-up">
+          <p class="eyebrow-label">FAQ</p>
+          <h3>Quick answers before<br><em>you book.</em></h3>
+        </div>
+        <div class="faq-grid">
+          <div class="faq-item reveal-fade" style="animation-delay:.05s">
+            <button class="faq-q" aria-expanded="false">
+              Can you learn a song for us?
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-a">
+              <p>Yes — send the track at least 3 days before the event and I'll have it ready to play live.</p>
+            </div>
+          </div>
+          <div class="faq-item reveal-fade" style="animation-delay:.1s">
+            <button class="faq-q" aria-expanded="false">
+              Do you travel outside Kingston?
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-a">
+              <p>Kingston travel is included. For St. Catherine, St. Andrew, or further afield, I'll add a small travel fee — always discussed upfront.</p>
+            </div>
+          </div>
+          <div class="faq-item reveal-fade" style="animation-delay:.15s">
+            <button class="faq-q" aria-expanded="false">
+              What's the weather backup plan?
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-a">
+              <p>I can play indoors with a compact setup or run backing tracks if space is tight. I always come prepared.</p>
+            </div>
+          </div>
+          <div class="faq-item reveal-fade" style="animation-delay:.2s">
+            <button class="faq-q" aria-expanded="false">
+              How do I lock in my date?
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-a">
+              <p>A 50% deposit via bank transfer secures your slot. The remaining balance is due on the day of the event.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOOKING FORM -->
+    <section id="booking" class="section booking-section">
+      <div class="section-inner booking-inner">
+        <div class="booking-text reveal-left">
+          <p class="eyebrow-label">Book now</p>
+          <h3>Tell me about<br><em>your event.</em></h3>
+          <p class="about-body">Fill in the details and I'll confirm availability within 24 hours. Prefer to chat? Hit WhatsApp.</p>
+          <a href="https://wa.me/18768355120" class="btn btn-wa" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp Jahtaim
+          </a>
+          <div class="booking-contact-links">
+            <a href="tel:+18768355120">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.05 1.18 2 2 0 012.03 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+              +1 (876) 835-5120
+            </a>
+            <a href="mailto:VibinWithJ@hotmail.com">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              VibinWithJ@hotmail.com
+            </a>
+          </div>
+        </div>
+
+        <div class="booking-form-wrap reveal-right">
+          <!-- Success state (hidden by default) -->
+          <div class="form-success" id="formSuccess" hidden>
+            <div class="success-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="48" height="48"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            </div>
+            <h4>Request sent!</h4>
+            <p>Thank you — I'll be in touch within 24 hours to confirm your booking.</p>
+            <a href="https://wa.me/18768355120" class="btn btn-wa" target="_blank">Follow up on WhatsApp</a>
+          </div>
+
+          <form class="booking-form" id="bookingForm" novalidate>
+            <div class="form-row">
+              <label class="form-field">
+                <span class="field-label">Your name</span>
+                <input type="text" name="name" placeholder="e.g. Kezia Brown" required autocomplete="name">
+                <span class="field-error">Please enter your name</span>
+              </label>
+            </div>
+            <div class="form-row">
+              <label class="form-field">
+                <span class="field-label">Email or WhatsApp / Phone</span>
+                <input type="text" name="contact" placeholder="you@example.com or +1 876 xxx xxxx" required autocomplete="email">
+                <span class="field-error">Please add a way to reach you</span>
+              </label>
+            </div>
+            <div class="form-row form-row--split">
+              <label class="form-field">
+                <span class="field-label">Event date</span>
+                <input type="date" name="date" required>
+                <span class="field-error">Please pick a date</span>
+              </label>
+              <label class="form-field">
+                <span class="field-label">City / Parish</span>
+                <input type="text" name="city" placeholder="Kingston" required autocomplete="address-level2">
+                <span class="field-error">Please enter your city</span>
+              </label>
+            </div>
+            <div class="form-row">
+              <label class="form-field">
+                <span class="field-label">Package</span>
+                <select name="package" id="packageSelect">
+                  <option value="Sweet Moment">Sweet Moment — $100 · 45 min</option>
+                  <option value="Golden Hour Set" selected>Golden Hour Set — $145 · 75 min</option>
+                  <option value="Signature Experience">Signature Experience — $175 · 2 hrs</option>
+                  <option value="Custom">Custom — tell me below</option>
+                </select>
+              </label>
+            </div>
+            <div class="form-row">
+              <label class="form-field">
+                <span class="field-label">Notes or song requests</span>
+                <textarea name="notes" rows="4" placeholder="Tell me about the vibe you want, any song requests, or event details…"></textarea>
+              </label>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">
+              <span class="btn-text">Send booking request</span>
+              <span class="btn-loading" hidden>Sending…</span>
+              <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
   </main>
 
-  <footer class="footer">
-    <div>
-      <p class="tag">Vibin with J</p>
-      <p>Steelpan bookings for intimate events across Jamaica. Young musician, big heart, flexible rates.</p>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="images/logo.jpg" alt="Vibin with J" class="footer-logo">
+        <div>
+          <p class="footer-name">Vibin with <span class="script-j">𝓙</span></p>
+          <p class="footer-tagline">Steelpan bookings for intimate events across Jamaica. Young musician, big heart, flexible rates.</p>
+        </div>
+      </div>
+      <div class="footer-links">
+        <a href="#packages">Packages</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#testimonials">Reviews</a>
+        <a href="#booking">Book Now</a>
+        <a href="https://wa.me/18768355120" target="_blank">WhatsApp</a>
+      </div>
+      <div class="footer-ctas">
+        <a class="btn btn-ghost" href="#booking">Book now</a>
+        <a class="btn btn-primary" href="mailto:VibinWithJ@hotmail.com">Email Jahtaim</a>
+      </div>
     </div>
-    <div class="footer-actions">
-      <a class="btn ghost" href="#booking">Book now</a>
-      <a class="btn secondary" href="mailto:VibinWithJ@hotmail.com">Email Jahtaim</a>
-    </div>
-  </footer>
-
-  <script>
-    // Smooth scroll for in-page links
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
-      link.addEventListener('click', e => {
-        const target = document.querySelector(link.getAttribute('href'));
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth' });
-        }
-      });
-    });
-  </script>
-</body>
-</html>
+    <div class="footer-bottom">
