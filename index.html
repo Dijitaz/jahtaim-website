@@ -27,12 +27,12 @@
   </header>
 
   <main>
-    <section class="hero">
+    <section class="hero" style="background-image: url('images/jahtaim.png'); background-size: cover; background-position: center;">
       <div class="hero-bg" aria-hidden="true"></div>
       <div class="hero-content">
         <p class="tag">Fresh steelpan energy • Friendly rates</p>
         <h2>Let the steelpan shimmer at your next event.</h2>
-        <p class="lede">Hello, I’m Jahtaim — a Jamaican steelpan musician bringing vibrant, soulful energy to every performance. From intimate gatherings to special celebrations, I create live music experiences that feel authentic, uplifting, and unforgettable. If you’re looking to add a unique island vibe to your event, I’m here to make it happen.</p>
+        <p class="lede">Hello, I'm Jahtaim — a Jamaican steelpan musician bringing vibrant, soulful energy to every performance. From intimate gatherings to special celebrations, I create live music experiences that feel authentic, uplifting, and unforgettable. If you're looking to add a unique island vibe to your event, I'm here to make it happen.</p>
         <div class="cta-row">
           <a class="btn primary" href="#booking">Book Jahtaim</a>
           <a class="btn ghost" href="#packages">See packages</a>
@@ -40,7 +40,7 @@
         </div>
         <div class="hero-list">
           <div>
-        <h3>What you can expect</h3>
+            <h3>What you can expect</h3>
             <ul>
               <li>Live music tailored to any crowd</li>
               <li>Custom song requests welcomed</li>
@@ -49,9 +49,11 @@
           </div>
           <div class="card audio-card">
             <p class="card-title">Take a Listen</p>
+            <!-- Replace media/audio.m4a with your actual audio file path -->
             <audio controls>
               <source src="media/audio.m4a" type="audio/mp4">
-              Your browser does not support audio.
+              <source src="media/audio.mp3" type="audio/mpeg">
+              <p style="font-size:0.85rem; opacity:0.7;">Audio preview coming soon — drop your file in the <code>media/</code> folder.</p>
             </audio>
           </div>
         </div>
@@ -116,6 +118,7 @@
         </ul>
       </div>
       <div class="card photo-card">
+        <!-- This photo panel is styled via CSS (.photo-card .photo). Set its background-image in styles.css -->
         <div class="photo" role="img" aria-label="Young steelpan musician performing outdoors"></div>
       </div>
     </section>
@@ -126,6 +129,7 @@
         <h3>A peek at the vibe.</h3>
       </div>
       <div class="gallery-grid">
+        <!-- Replace these with your actual image paths, e.g. style="background-image:url('images/gallery1.jpg')" -->
         <div class="tile t1"></div>
         <div class="tile t2"></div>
         <div class="tile t3"></div>
@@ -208,9 +212,9 @@
         <label>
           Which package?
           <select name="package">
-            <option>Starter Vibe</option>
-            <option>Sunset Session</option>
-            <option>Full Show</option>
+            <option>Sweet Moment</option>
+            <option>Golden Hour Set</option>
+            <option>Signature Experience</option>
             <option>Custom (tell me below)</option>
           </select>
         </label>
@@ -237,7 +241,7 @@
 
   <script>
     // Smooth scroll for in-page links
-    document.querySelectorAll('a[href^=\"#\"]').forEach(link => {
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
       link.addEventListener('click', e => {
         const target = document.querySelector(link.getAttribute('href'));
         if (target) {
