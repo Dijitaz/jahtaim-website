@@ -103,6 +103,20 @@ body {
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  color-scheme: dark;
+}
+body.light-mode {
+  color-scheme: light;
+}
+
+/* Force select dropdown to match dark theme */
+select option {
+  background: #0d1a2e;
+  color: #edf0f7;
+}
+body.light-mode select option {
+  background: #f0f5ee;
+  color: #0a1a0a;
 }
 
 /* Subtle Jahtaim.png fixed behind all content */
