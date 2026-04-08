@@ -11,6 +11,13 @@
     link.addEventListener("click", (e) => {
       const id = link.getAttribute("href");
       if (id === "#") return;
+      /* #top → scroll page all the way to the top */
+      if (id === "#top") {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        closeMobileMenu();
+        return;
+      }
       const target = document.querySelector(id);
       if (target) {
         e.preventDefault();
@@ -19,6 +26,31 @@
       }
     });
   });
+
+  /* ── Light / Dark mode toggle ──────────────────────────── */
+  (function initTheme() {
+    const btn = document.getElementById("themeToggle");
+    const iconMoon = btn && btn.querySelector(".icon-moon");
+    const iconSun = btn && btn.querySelector(".icon-sun");
+    const saved = localStorage.getItem("theme");
+
+    function applyTheme(light) {
+      document.body.classList.toggle("light-mode", light);
+      if (iconMoon) iconMoon.hidden = light;
+      if (iconSun) iconSun.hidden = !light;
+    }
+
+    applyTheme(saved === "light");
+
+    if (btn) {
+      btn.addEventListener("click", () => {
+        const isLight = document.body.classList.toggle("light-mode");
+        localStorage.setItem("theme", isLight ? "light" : "dark");
+        if (iconMoon) iconMoon.hidden = isLight;
+        if (iconSun) iconSun.hidden = !isLight;
+      });
+    }
+  })();
 
   /* ── Header scroll shadow ───────────────────────────────── */
   const header = document.querySelector(".site-header");
@@ -143,6 +175,16 @@
 
   if (bookingForm) bookingForm.addEventListener("submit", handleFormSubmit);
 
+  /*
+   * EMAIL SETUP — uses Formspree (free, no backend needed).
+   * Steps to activate:
+   *  1. Go to https://formspree.io and sign up (free).
+   *  2. Create a new form and connect your Gmail address.
+   *  3. Copy your form endpoint (looks like https://formspree.io/f/abcd1234).
+   *  4. Paste it below replacing FORMSPREE_ENDPOINT.
+   */
+  const FORMSPREE_ENDPOINT = "https://formspree.io/f/xkopeebz";
+
   function handleFormSubmit(e) {
     e.preventDefault();
     if (!validateForm()) return;
@@ -158,51 +200,51 @@
     if (btnArrow) btnArrow.hidden = true;
 
     const data = Object.fromEntries(new FormData(bookingForm).entries());
-    const subject = encodeURIComponent(
-      `Booking Request: ${data.package} — ${data.name}`,
-    );
-    const body = encodeURIComponent(buildEmailBody(data));
-    window.location.href = `mailto:VibinWithJ@hotmail.com?subject=${subject}&body=${body}`;
 
-    setTimeout(() => {
-      submitBtn.disabled = false;
-      if (btnText) btnText.hidden = false;
-      if (btnLoading) btnLoading.hidden = true;
-      if (btnArrow) btnArrow.hidden = false;
-      showSuccess(data);
-    }, 800);
-  }
-
-  function buildEmailBody(d) {
-    return [
-      `Hi Jahtaim,`,
-      ``,
-      `I'd like to book you for an event. Here are my details:`,
-      ``,
-      `Name:       ${d.name}`,
-      `Contact:    ${d.contact}`,
-      `Event date: ${d.date || "TBD"}`,
-      `City:       ${d.city}`,
-      `Package:    ${d.package}`,
-      ``,
-      `Notes / Song requests:`,
-      d.notes || "(none)",
-      ``,
-      `Please confirm my booking within 24 hours.`,
-      ``,
-      `Thanks,`,
-      d.name,
-    ].join("\n");
+    fetch(FORMSPREE_ENDPOINT, {
+      method: "POST",
+      headers: { Accept: "application/json" },
+      body: new FormData(bookingForm),
+    })
+      .then((res) => {
+        if (res.ok) {
+          showSuccess(data);
+        } else {
+          return res.json().then((body) => {
+            throw new Error(body.error || "Send failed");
+          });
+        }
+      })
+      .catch((err) => {
+        alert(
+          "Sorry, something went wrong. Please WhatsApp or email directly.\n\n" +
+            err.message,
+        );
+      })
+      .finally(() => {
+        submitBtn.disabled = false;
+        if (btnText) btnText.hidden = false;
+        if (btnLoading) btnLoading.hidden = true;
+        if (btnArrow) btnArrow.hidden = false;
+      });
   }
 
   function showSuccess(data) {
     if (!bookingForm || !formSuccess) return;
     bookingForm.hidden = true;
     formSuccess.hidden = false;
-    formSuccess.scrollIntoView({ behavior: "smooth", block: "center" });
+
     const h4 = formSuccess.querySelector("h4");
     if (h4 && data.name)
       h4.textContent = `Request sent, ${data.name.split(" ")[0]}!`;
+
+    /* Trigger animation on next frame so the browser registers the hidden→visible transition */
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        formSuccess.classList.add("animate-in");
+        formSuccess.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    });
   }
 
   function validateForm() {
@@ -259,12 +301,23 @@
     },
   ];
 
-  (function renderTestimonials() {
-    const grid = document.getElementById("testimonialsGrid");
-    if (!grid) return;
-    grid.innerHTML = TESTIMONIALS.map(
-      (t, i) => `
-      <article class="testimonial-card reveal-up" style="animation-delay:${(i + 1) * 0.1}s">
+  (function initTestimonialSlider() {
+    const track = document.getElementById("tsliderTrack");
+    const prevBtn = document.getElementById("tsliderPrev");
+    const nextBtn = document.getElementById("tsliderNext");
+    if (!track) return;
+
+    const VISIBLE = 3; // cards fully shown at once
+    const PEEK = 50; // px of next card peeking at right edge
+    const GAP = 18; // matches CSS gap
+    const total = TESTIMONIALS.length;
+    let current = 0;
+    let autoTimer;
+
+    /* Build cards */
+    track.innerHTML = TESTIMONIALS.map(
+      (t) => `
+      <article class="testimonial-card">
         <div class="quote-mark">"</div>
         <p class="quote-text">${t.text}</p>
         <div class="quote-sig">
@@ -274,25 +327,60 @@
       </article>`,
     ).join("");
 
-    // Observe newly rendered cards for scroll reveal
-    if ("IntersectionObserver" in window) {
-      const revealIO = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("visible");
-              revealIO.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.08, rootMargin: "0px 0px -40px 0px" },
-      );
-      grid.querySelectorAll(".reveal-up").forEach((el) => revealIO.observe(el));
-    } else {
-      grid
-        .querySelectorAll(".reveal-up")
-        .forEach((el) => el.classList.add("visible"));
+    const cards = Array.from(track.querySelectorAll(".testimonial-card"));
+
+    function cardWidth() {
+      const outer = track.parentElement.offsetWidth;
+      /* fit VISIBLE cards + gaps + peek into the outer width */
+      return Math.floor((outer - (VISIBLE - 1) * GAP - PEEK) / VISIBLE);
     }
+
+    function markVisible() {
+      cards.forEach((c, i) => {
+        c.classList.toggle("is-visible", i >= current && i < current + VISIBLE);
+      });
+    }
+
+    function applyWidths() {
+      const w = cardWidth();
+      cards.forEach((c) => (c.style.width = w + "px"));
+    }
+
+    function goTo(idx) {
+      const maxStep = Math.max(0, total - VISIBLE);
+      current = ((idx % total) + total) % total;
+      if (current > maxStep) current = 0; // wrap back
+      const offset = current * (cardWidth() + GAP);
+      track.style.transform = `translateX(-${offset}px)`;
+      markVisible();
+    }
+
+    function resetAuto() {
+      clearInterval(autoTimer);
+      autoTimer = setInterval(() => goTo(current + 1), 5000);
+    }
+
+    prevBtn.addEventListener("click", () => {
+      goTo(current - 1);
+      resetAuto();
+    });
+    nextBtn.addEventListener("click", () => {
+      goTo(current + 1);
+      resetAuto();
+    });
+
+    applyWidths();
+    goTo(0);
+    resetAuto();
+
+    window.addEventListener(
+      "resize",
+      () => {
+        applyWidths();
+        goTo(current);
+      },
+      { passive: true },
+    );
   })();
 
   /* ── Stagger transition delays on grids ─────────────────── */
@@ -530,46 +618,67 @@
 
   /* ────────────────────────────────────────────────────────
      VIDEO CAROUSEL
+     Scalable: just add more <div class="carousel-slide"> blocks
+     in the HTML — dots and counter auto-generate.
   ──────────────────────────────────────────────────────── */
   (function initCarousel() {
-    const carousel = document.querySelector('.video-carousel');
+    const carousel = document.querySelector(".video-carousel");
     if (!carousel) return;
 
-    const track   = carousel.querySelector('.carousel-track');
-    const slides  = Array.from(track.querySelectorAll('.carousel-slide'));
-    const dots    = Array.from(carousel.querySelectorAll('.carousel-dot'));
-    const counter = carousel.querySelector('.carousel-counter');
-    const total   = slides.length;
-    let   current = 0;
+    const track = carousel.querySelector(".carousel-track");
+    const slides = Array.from(track.querySelectorAll(".carousel-slide"));
+    const dotsWrap = document.getElementById("carouselDots");
+    const counter = document.getElementById("carouselCounter");
+    const total = slides.length;
+    let current = 0;
+
+    /* Auto-generate one dot per slide */
+    if (dotsWrap) {
+      dotsWrap.innerHTML = slides
+        .map(
+          (_, i) =>
+            `<button class="carousel-dot${i === 0 ? " active" : ""}" data-idx="${i}" aria-label="Video ${i + 1}"></button>`,
+        )
+        .join("");
+    }
+    const dots = dotsWrap
+      ? Array.from(dotsWrap.querySelectorAll(".carousel-dot"))
+      : [];
+
+    function pauseAll(exceptIdx) {
+      slides.forEach((slide, i) => {
+        if (i === exceptIdx) return;
+        const vid = slide.querySelector("video");
+        if (vid && !vid.paused) {
+          vid.pause();
+          vid.currentTime = 0;
+        }
+      });
+    }
 
     function goTo(idx) {
-      /* Pause & reset every video except the target */
-      slides.forEach((slide, i) => {
-        const vid = slide.querySelector('video');
-        if (vid && i !== idx) { vid.pause(); vid.currentTime = 0; }
-      });
-
+      pauseAll(idx);
       current = ((idx % total) + total) % total;
       track.style.transform = `translateX(-${current * 100}%)`;
-      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+      dots.forEach((d, i) => d.classList.toggle("active", i === current));
       if (counter) counter.textContent = `${current + 1} / ${total}`;
     }
 
-    carousel.querySelector('.carousel-prev')
-      .addEventListener('click', () => goTo(current - 1));
-    carousel.querySelector('.carousel-next')
-      .addEventListener('click', () => goTo(current + 1));
-    dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
+    carousel
+      .querySelector(".carousel-prev")
+      .addEventListener("click", () => goTo(current - 1));
+    carousel
+      .querySelector(".carousel-next")
+      .addEventListener("click", () => goTo(current + 1));
+    dots.forEach((dot, i) => dot.addEventListener("click", () => goTo(i)));
 
-    /* Pause off-screen videos whenever any video plays */
+    /* Stop other videos the moment one starts playing */
     slides.forEach((slide, idx) => {
-      const vid = slide.querySelector('video');
+      const vid = slide.querySelector("video");
       if (!vid) return;
-      vid.addEventListener('play', () => {
-        goTo(idx); /* snap to this slide */
-        slides.forEach((s, i) => {
-          if (i !== idx) { const v = s.querySelector('video'); if (v) { v.pause(); v.currentTime = 0; } }
-        });
+      vid.addEventListener("play", () => {
+        goTo(idx);
+        pauseAll(idx);
       });
     });
 
@@ -578,18 +687,25 @@
 
   /* ── Video thumbnails (auto-capture first frame) ─────────── */
   (function generateThumbnails() {
-    document.querySelectorAll('.carousel-slide video').forEach((vid) => {
+    document.querySelectorAll(".carousel-slide video").forEach((vid) => {
       const capture = () => {
         if (!vid.videoWidth) return;
-        const canvas = document.createElement('canvas');
-        canvas.width  = vid.videoWidth;
+        const canvas = document.createElement("canvas");
+        canvas.width = vid.videoWidth;
         canvas.height = vid.videoHeight;
-        canvas.getContext('2d').drawImage(vid, 0, 0);
-        try { vid.poster = canvas.toDataURL('image/jpeg', 0.8); } catch (_) {}
+        canvas.getContext("2d").drawImage(vid, 0, 0);
+        try {
+          vid.poster = canvas.toDataURL("image/jpeg", 0.8);
+        } catch (_) {}
       };
-      vid.addEventListener('seeked',        capture, { once: true });
-      vid.addEventListener('loadedmetadata', () => { vid.currentTime = 1.5; }, { once: true });
+      vid.addEventListener("seeked", capture, { once: true });
+      vid.addEventListener(
+        "loadedmetadata",
+        () => {
+          vid.currentTime = 1.5;
+        },
+        { once: true },
+      );
     });
   })();
-
 })();
