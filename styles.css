@@ -1722,25 +1722,98 @@ textarea { resize: vertical; min-height: 110px; }
 }
 
 /* ── RESPONSIVE ───────────────────────────────────────────── */
+/* ── TABLET (≤ 900px) ─────────────────────────────────────── */
 @media (max-width: 900px) {
   .nav { display: none; }
   .menu-toggle { display: flex; }
+
+  /* About */
   .about-inner { grid-template-columns: 1fr; gap: 40px; }
-  .about-photo { aspect-ratio: 3/2; }
+  .about-photo  { aspect-ratio: 3/2; }
+
+  /* Booking */
   .booking-inner { grid-template-columns: 1fr; gap: 40px; }
+
+  /* Footer */
   .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+  .footer-ctas  { flex-direction: row; flex-wrap: wrap; }
+
+  /* Testimonial slider — show 2 at a time */
+  .tslider-outer { --t-visible: 2; }
+
+  /* Video carousel full width on tablet */
+  .video-carousel { max-width: 100%; }
 }
 
+/* ── PHONE (≤ 600px) ──────────────────────────────────────── */
 @media (max-width: 600px) {
-  .hero { padding: 100px 5vw 60px; }
-  .hero-title { font-size: 2.6rem; }
-  .section { padding: 70px 5vw; }
-  .strip-inner { flex-direction: column; gap: 4px; align-items: stretch; }
-  .strip-item  { flex-direction: row; text-align: left; padding: 12px 16px; }
-  .strip-divider { display: none; }
-  .form-row--split { grid-template-columns: 1fr; }
+  /* Global spacing */
+  .section { padding: 60px 4vw; }
+  .section-head { margin-bottom: 32px; }
+  .section-head h3 { font-size: 1.8rem; }
+
+  /* Hero */
+  .hero { padding: 90px 4vw 56px; min-height: 100svh; }
+  .hero-title { font-size: clamp(2rem, 10vw, 2.8rem); }
+  .hero-content { gap: 16px; }
+  .hero-lede { font-size: 0.95rem; }
+  .hero-actions { gap: 10px; }
+  .hero-actions .btn { padding: 11px 16px; font-size: 0.85rem; }
+  .hero-price-tag { font-size: 0.8rem; }
+  .hero-scroll-cue { display: none; }
   .pan-deco { display: none; }
+
+  /* Audio card */
+  .hero-audio-card {
+    width: 100%;
+    max-width: 100%;
+    padding: 12px 14px;
+    gap: 12px;
+  }
+  .audio-disc { width: 50px; height: 50px; }
+  .audio-track-name { font-size: 0.8rem; }
+
+  /* Feature strip */
+  .strip-inner    { flex-direction: column; gap: 0; align-items: stretch; }
+  .strip-item     { flex-direction: row; text-align: left; padding: 12px 16px; gap: 14px; }
+  .strip-icon     { width: 36px; height: 36px; flex-shrink: 0; }
+  .strip-divider  { display: none; }
+
+  /* Packages */
   .packages-grid { grid-template-columns: 1fr; }
+  .pkg-card-inner { padding: 20px; }
+
+  /* About */
+  .about-section { padding: 60px 4vw; }
+  .about-photo   { aspect-ratio: 4/3; }
+  .checklist     { gap: 8px; }
+
+  /* Gallery / video carousel */
+  .gallery-section { padding: 60px 4vw; }
+  .video-carousel  { max-width: 100%; border-radius: var(--radius-sm); }
+  .carousel-btn    { width: 36px; height: 36px; }
+
+  /* Testimonials — show 1 at a time */
+  .tslider-outer { --t-visible: 1; }
+  .tslider-btn   { width: 32px; height: 32px; }
+
+  /* FAQ */
+  .faq-section { padding: 60px 4vw; }
+  .faq-q       { font-size: 0.88rem; padding: 14px 16px; }
+
+  /* Booking form */
+  .booking-section { padding: 60px 4vw; }
+  .form-row--split { grid-template-columns: 1fr; }
+  .booking-text h3 { font-size: 1.8rem; }
+
+  /* Footer */
+  .footer-inner  { padding: 40px 4vw 24px; }
+  .footer-brand  { flex-direction: column; gap: 10px; }
+  .footer-ctas   { flex-direction: column; }
+  .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+
+  /* Buttons */
+  .btn-full { font-size: 0.9rem; }
 }
 
 /* ── SELECTION ────────────────────────────────────────────── */
