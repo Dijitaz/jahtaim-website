@@ -307,12 +307,22 @@
     const nextBtn = document.getElementById("tsliderNext");
     if (!track) return;
 
-    const VISIBLE = 3; // cards fully shown at once
-    const PEEK = 50; // px of next card peeking at right edge
     const GAP = 18; // matches CSS gap
     const total = TESTIMONIALS.length;
     let current = 0;
     let autoTimer;
+
+    /* Responsive helpers — match CSS breakpoints */
+    function getVisible() {
+      if (window.innerWidth <= 600) return 1;
+      if (window.innerWidth <= 900) return 2;
+      return 3;
+    }
+    function getPeek() {
+      if (window.innerWidth <= 600) return 0;   // no peek on phone (prevents overflow)
+      if (window.innerWidth <= 900) return 32;
+      return 50;
+    }
 
     /* Build cards */
     track.innerHTML = TESTIMONIALS.map(
@@ -330,12 +340,15 @@
     const cards = Array.from(track.querySelectorAll(".testimonial-card"));
 
     function cardWidth() {
+      const VISIBLE = getVisible();
+      const PEEK = getPeek();
       const outer = track.parentElement.offsetWidth;
       /* fit VISIBLE cards + gaps + peek into the outer width */
       return Math.floor((outer - (VISIBLE - 1) * GAP - PEEK) / VISIBLE);
     }
 
     function markVisible() {
+      const VISIBLE = getVisible();
       cards.forEach((c, i) => {
         c.classList.toggle("is-visible", i >= current && i < current + VISIBLE);
       });
@@ -347,6 +360,7 @@
     }
 
     function goTo(idx) {
+      const VISIBLE = getVisible();
       const maxStep = Math.max(0, total - VISIBLE);
       current = ((idx % total) + total) % total;
       if (current > maxStep) current = 0; // wrap back
