@@ -436,6 +436,19 @@ code {
   margin-top: 10px;
   font-size: 0.95rem;
 }
+.price-negotiable-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: rgba(29,209,161,0.08);
+  border: 1px solid var(--stroke-teal);
+  border-radius: 999px;
+  font-size: 0.83rem;
+  color: var(--teal);
+  font-style: italic;
+}
 .eyebrow-label {
   text-transform: uppercase;
   letter-spacing: 0.2em;
@@ -634,6 +647,7 @@ body.light-mode .hero-lede {
   font-size: 0.85rem;
 }
 .hero-price-tag strong { color: var(--teal); }
+.hero-price-tag em { color: var(--teal); font-style: italic; }
 
 /* Hero audio card — floats over right side of hero image */
 .hero-audio-card {
