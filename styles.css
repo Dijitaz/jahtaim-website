@@ -1158,6 +1158,51 @@ body.light-mode .hero-lede {
   flex-shrink: 0;
 }
 
+/* ── SCRIPTURE / PHILOSOPHY BLOCK ────────────────────────── */
+.scripture-block {
+  margin-top: 28px;
+  padding: 20px 22px;
+  border-left: 3px solid var(--teal);
+  background: var(--bg-card);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  position: relative;
+}
+.scripture-block::before {
+  content: '\201C';
+  position: absolute;
+  top: -8px;
+  left: 14px;
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: var(--teal);
+  opacity: 0.35;
+  line-height: 1;
+}
+.scripture-text {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.97rem;
+  color: var(--text);
+  line-height: 1.65;
+  margin: 0 0 8px;
+}
+.scripture-ref {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  color: var(--teal);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-style: normal;
+}
+.scripture-motto {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 0;
+}
+
 /* ── GALLERY ──────────────────────────────────────────────── */
 .gallery-section {
   padding: 90px 5vw;
